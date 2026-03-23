@@ -29,3 +29,5 @@ if (process.env.NODE_ENV !== 'production') {
     logger.warn(`Slow Query: ${e.query} - Duration: ${e.duration}ms`);
   }
 });
+
+logger.info('Database client wrapper optimizations applied successfully.');
