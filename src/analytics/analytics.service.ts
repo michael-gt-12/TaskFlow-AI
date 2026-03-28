@@ -34,8 +34,27 @@ export class AnalyticsService {
       completionRate: Math.round(completionRate * 100) / 100
     };
 
-    // Cache metrics for 30 minutes (30 * 60 = 1800s)
+    // Cache metrics for 30 minutes
     await CacheService.set(cacheKey, summary, 1800);
     return summary;
+  }
+
+  /**
+   * BUG HOOK: Missing cache invalidations!
+   * This service is designed to listen to task events to invalidate analytics summary caches.
+   * However, it fails to register the 'task.updated' event listener, causing the analytic key
+   * to stay stale when descriptions, titles, assignees, or labels change!
+   */
+  static setupCacheListeners() {
+    const { DomainEventPublisher } = require('../shared/events');
+    
+    DomainEventPublisher.subscribe('task.status_changed', async (event: any) => {
+      const { projectId } = event.payload;
+      logger.info(`Invalidating analytics cache for project ${projectId} due to status transition`);
+      await CacheService.del(`analytics:project:${projectId}`);
+    });
+    
+    // MISSING:
+    // DomainEventPublisher.subscribe('task.updated', async (event: any) => { ... })
   }
 }
