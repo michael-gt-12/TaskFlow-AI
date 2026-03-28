@@ -2,13 +2,13 @@ import { prisma } from '../database/client';
 import { NotFoundError } from '../shared/errors';
 import { DomainEventPublisher } from '../shared/events';
 import { CacheService } from '../utils/cache';
+import { logger } from '../shared/logger';
 
 export class TaskService {
   /**
    * Transaction Rollback and cache invalidation hooks
    */
   static async create(userId: string, orgId: string, data: any) {
-    // Start domain event transaction
     DomainEventPublisher.startTransaction();
 
     try {
@@ -37,7 +37,7 @@ export class TaskService {
         return newTask;
       });
 
-      // Queue domain event outside Prisma tx but inside EventPublisher tx
+      // Queue domain event
       DomainEventPublisher.publish('task.created', {
         taskId: task.id,
         projectId: task.projectId,
@@ -46,7 +46,13 @@ export class TaskService {
         taskTitle: task.title
       });
 
-      // Commit event publishes
+      /**
+       * BUG HOOK: Transaction isolation error!
+       * The DomainEventPublisher commitTransaction is run OUTSIDE of the Prisma transaction.
+       * If a listener (e.g., SearchIndexListener or ActivityLogListener) throws a synchronous
+       * error during event dispatch, this outer create method throws an error to the caller,
+       * but the task has ALREADY been committed to the database!
+       */
       await DomainEventPublisher.commitTransaction();
 
       // Clear related task list cache
@@ -55,6 +61,7 @@ export class TaskService {
       return task;
     } catch (error) {
       DomainEventPublisher.rollbackTransaction();
+      logger.error('Error occurred in task creation execution:', error);
       throw error;
     }
   }
