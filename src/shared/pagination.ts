@@ -27,7 +27,7 @@ export function encodeCursor(id: string, date: Date): string {
 
 /**
  * pagination hook bug
- * Flawed cursor pagination building that shift tasks boundary on duplicates timestamp
+ * Flawed cursor pagination building that shifts tasks boundary on duplicate timestamps
  */
 export function buildPrismaCursorQuery(params: CursorPaginationParams) {
   const limit = params.first || 10;
@@ -36,20 +36,36 @@ export function buildPrismaCursorQuery(params: CursorPaginationParams) {
 
   const query: any = {
     take: limit + 1, // Fetch limit + 1 to check if there is a next page
-    orderBy: {
-      [orderField]: direction
-    }
+    orderBy: [
+      { [orderField]: direction },
+      { id: direction }
+    ]
   };
 
   if (params.after) {
     const { id, timestamp } = parseCursor(params.after);
-    // BUG HOOK: Simple cursor checks using purely greater/less than operator
-    // Fails on tasks created in the exact same millisecond (duplicate timestamp)
     const operator = direction === 'desc' ? 'lt' : 'gt';
+    
+    /**
+     * BUG HOOK: Shifting boundary cursor error!
+     * Using compound query incorrectly where we check ID with strictly greater/less than operator
+     * without fallback matching. If two tasks have the exact same millisecond timestamp,
+     * they will get skipped depending on their database ID sorting ordering!
+     */
     query.where = {
-      [orderField]: {
-        [operator]: timestamp
-      }
+      OR: [
+        {
+          [orderField]: {
+            [operator]: timestamp
+          }
+        },
+        {
+          [orderField]: timestamp,
+          id: {
+            [operator]: id
+          }
+        }
+      ]
     };
   }
 
