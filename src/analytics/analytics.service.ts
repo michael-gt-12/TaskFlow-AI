@@ -8,7 +8,7 @@ export class AnalyticsService {
    */
   static async getProjectSummary(projectId: string) {
     const cacheKey = `analytics:project:${projectId}`;
-    const cached = await CacheService.get(cacheKey);
+    const cached = await CacheService.get<any>(cacheKey);
     if (cached) {
       logger.info(`Analytics cache hit for project ${projectId}`);
       return cached;

@@ -38,7 +38,7 @@ export class OrgService {
 
   static async getById(orgId: string) {
     const cacheKey = `org:${orgId}`;
-    const cached = await CacheService.get(cacheKey);
+    const cached = await CacheService.get<any>(cacheKey);
     if (cached) return cached;
 
     const org = await prisma.organization.findUnique({

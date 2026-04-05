@@ -68,7 +68,7 @@ export class TaskService {
 
   static async getById(taskId: string) {
     const cacheKey = `task:${taskId}`;
-    const cached = await CacheService.get(cacheKey);
+    const cached = await CacheService.get<any>(cacheKey);
     if (cached) return cached;
 
     const task = await prisma.task.findUnique({

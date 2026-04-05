@@ -18,7 +18,7 @@ export class ProjectService {
 
   static async getById(projectId: string) {
     const cacheKey = `project:${projectId}`;
-    const cached = await CacheService.get(cacheKey);
+    const cached = await CacheService.get<any>(cacheKey);
     if (cached) return cached;
 
     const project = await prisma.project.findUnique({
