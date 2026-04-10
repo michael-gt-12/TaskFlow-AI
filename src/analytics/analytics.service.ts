@@ -53,8 +53,11 @@ export class AnalyticsService {
       logger.info(`Invalidating analytics cache for project ${projectId} due to status transition`);
       await CacheService.del(`analytics:project:${projectId}`);
     });
-    
-    // MISSING:
-    // DomainEventPublisher.subscribe('task.updated', async (event: any) => { ... })
+
+    DomainEventPublisher.subscribe('task.updated', async (event: any) => {
+      const { projectId } = event.payload;
+      logger.info(`Invalidating analytics cache for project ${projectId} due to task update`);
+      await CacheService.del(`analytics:project:${projectId}`);
+    });
   }
 }
