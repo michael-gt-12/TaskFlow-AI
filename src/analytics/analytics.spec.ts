@@ -1,6 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { AnalyticsService } from './analytics.service';
 import { prisma } from '../database/client';
+import { DomainEventPublisher } from '../shared/events';
+import { CacheService } from '../utils/cache';
 
 vi.mock('../database/client', () => ({
   prisma: {
@@ -24,5 +26,22 @@ describe('AnalyticsService', () => {
     const result = await AnalyticsService.getProjectSummary('p1');
     expect(result.completionRate).toBe(50);
     expect(result.totalTasks).toBe(2);
+  });
+
+  it('should invalidate cache when task is updated', async () => {
+    const delSpy = vi.spyOn(CacheService, 'del');
+
+    AnalyticsService.setupCacheListeners();
+
+    DomainEventPublisher.publish('task.updated', {
+      taskId: 't1',
+      projectId: 'p1',
+      orgId: 'o1',
+      userId: 'u1',
+      taskTitle: 'Test Task'
+    });
+
+    await new Promise(r => setTimeout(r, 10));
+    expect(delSpy).toHaveBeenCalledWith('analytics:project:p1');
   });
 });

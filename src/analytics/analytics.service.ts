@@ -1,6 +1,7 @@
 import { prisma } from '../database/client';
 import { CacheService } from '../utils/cache';
 import { logger } from '../shared/logger';
+import { DomainEventPublisher } from '../shared/events';
 
 export class AnalyticsService {
   /**
@@ -46,8 +47,6 @@ export class AnalyticsService {
    * to stay stale when descriptions, titles, assignees, or labels change!
    */
   static setupCacheListeners() {
-    const { DomainEventPublisher } = require('../shared/events');
-    
     DomainEventPublisher.subscribe('task.status_changed', async (event: any) => {
       const { projectId } = event.payload;
       logger.info(`Invalidating analytics cache for project ${projectId} due to status transition`);
