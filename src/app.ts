@@ -13,6 +13,7 @@ import { setupActivityListeners } from './activity/activity.listener';
 import { setupNotificationListeners } from './notifications/notification.listener';
 import { setupSearchListeners } from './search/search.listener';
 import { AnalyticsService } from './analytics/analytics.service';
+import { setupIntegrationListeners } from './integrations/integration.listener';
 import { JobRunner } from './jobs/job.runner';
 import { AnalyticsRefreshJob } from './jobs/analytics-refresh.job';
 import { SearchIndexMaintenanceJob } from './jobs/search-index-maintenance.job';
@@ -39,6 +40,7 @@ setupActivityListeners();
 setupNotificationListeners();
 setupSearchListeners();
 AnalyticsService.setupCacheListeners();
+setupIntegrationListeners();
 
 // Register background jobs
 JobRunner.register(new AnalyticsRefreshJob());
