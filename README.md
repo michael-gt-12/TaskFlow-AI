@@ -11,6 +11,8 @@ TaskFlow AI is a robust multi-tenant task and project management SaaS backend ap
 5. **Redis Cache Layer:** Ultra-fast metrics fetching and key decorator caches.
 6. **Self-Contained AI Module:** Simulates robust LLM actions including latencies, billing accounting, and failure retries.
 7. **Search Indexing:** Asynchronous in-app indexing.
+8. **Background Jobs Engine:** Integrated runner executing analytics refresh, search index optimization, notification cleanup, and archival maintenance.
+9. **Mock Integrations:** Clean abstractions and local drivers for Email, Webhooks, and Identity SSO providers.
 
 ## Tech Stack
 
@@ -43,4 +45,10 @@ TaskFlow AI is a robust multi-tenant task and project management SaaS backend ap
 4. **Execute Tests:**
    ```bash
    pnpm test
+   ```
+
+5. **Execute Background Jobs Manually:**
+   Manually trigger all registered background jobs via administrative endpoints:
+   ```bash
+   curl -X POST http://localhost:3000/api/jobs/run-all -H "Authorization: Bearer <ADMIN_JWT>"
    ```
