@@ -1,3 +1,4 @@
+// TaskFlow AI - Production SaaS Core Bootstrapper
 import app from './app';
 import { logger } from './shared/logger';
 
