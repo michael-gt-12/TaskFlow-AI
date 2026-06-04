@@ -2,6 +2,7 @@ import { prisma } from '../database/client';
 import { ConflictError, NotFoundError, ForbiddenError } from '../shared/errors';
 import { OrgRole } from '@prisma/client';
 import { CacheService } from '../utils/cache';
+import { BillingService } from '../billing/billing.service';
 
 export class OrgService {
   static async create(userId: string, data: any) {
@@ -55,6 +56,8 @@ export class OrgService {
   }
 
   static async inviteMember(orgId: string, inviterId: string, email: string, role: OrgRole) {
+    await BillingService.checkMemberLimit(orgId);
+
     const userToInvite = await prisma.user.findUnique({
       where: { email }
     });

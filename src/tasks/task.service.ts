@@ -3,12 +3,15 @@ import { NotFoundError } from '../shared/errors';
 import { DomainEventPublisher } from '../shared/events';
 import { CacheService } from '../utils/cache';
 import { logger } from '../shared/logger';
+import { BillingService } from '../billing/billing.service';
 
 export class TaskService {
   /**
    * Transaction Rollback and cache invalidation hooks
    */
   static async create(userId: string, orgId: string, data: any) {
+    await BillingService.checkTaskLimit(data.projectId);
+
     DomainEventPublisher.startTransaction();
 
     try {

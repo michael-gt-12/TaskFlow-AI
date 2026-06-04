@@ -1,9 +1,12 @@
 import { prisma } from '../database/client';
 import { NotFoundError } from '../shared/errors';
 import { CacheService } from '../utils/cache';
+import { BillingService } from '../billing/billing.service';
 
 export class ProjectService {
   static async create(orgId: string, data: any) {
+    await BillingService.checkProjectLimit(orgId);
+
     const project = await prisma.project.create({
       data: {
         name: data.name,

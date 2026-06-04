@@ -59,6 +59,8 @@ model Organization {
   members   OrgMember[]
   projects  Project[]
   activityLogs ActivityLog[]
+  billing      OrgBilling?
+  invitations  OrgInvitation[]
 }
 
 model OrgMember {
@@ -86,6 +88,7 @@ model Project {
   tasks          Task[]
   labels         Label[]
   activityLogs   ActivityLog[]
+  automationRules AutomationRule[]
 }
 
 model Task {
@@ -159,4 +162,44 @@ model SearchIndex {
   document   String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+}
+
+model OrgBilling {
+  id             String       @id @default(uuid())
+  organizationId String       @unique
+  stripeCustomerId String?
+  stripeSubscriptionId String?
+  tier           String       @default("FREE") // FREE, PRO, ENTERPRISE
+  status         String       @default("ACTIVE")
+  endsAt         DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model OrgInvitation {
+  id             String       @id @default(uuid())
+  organizationId String
+  email          String
+  role           OrgRole      @default(MEMBER)
+  token          String       @unique
+  status         String       @default("PENDING") // PENDING, ACCEPTED, REJECTED, EXPIRED
+  invitedById    String
+  expiresAt      DateTime
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model AutomationRule {
+  id             String       @id @default(uuid())
+  projectId      String
+  name           String
+  triggerType    String       // task.created, task.status_changed
+  conditions     Json         // e.g. { "status": "IN_REVIEW" }
+  actions        Json         // e.g. { "assignToOwner": true, "notify": true }
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  project        Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
 }
