@@ -133,6 +133,7 @@ enum SubscriptionStatus {
   ACTIVE
   PAST_DUE
   CANCELLED
+  EXPIRED
   TRIALING
 }
 

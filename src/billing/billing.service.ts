@@ -128,7 +128,7 @@ export class BillingService {
           data: {
             tier: 'FREE',
             stripeSubscriptionId: null,
-            status: 'CANCELLED',
+            status: 'EXPIRED',
             endsAt: new Date()
           }
         });
