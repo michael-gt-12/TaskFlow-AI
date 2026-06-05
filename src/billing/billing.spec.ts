@@ -55,6 +55,9 @@ describe('Billing & Subscriptions Module', () => {
         stripeSubscriptionId: 'sub_123',
         tier: 'PRO',
         status: 'ACTIVE',
+        seats: 30,
+        trialEndsAt: null,
+        currentPeriodEnd: null,
         endsAt: null,
         createdAt: new Date(),
         updatedAt: new Date()
