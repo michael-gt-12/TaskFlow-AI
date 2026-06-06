@@ -8,7 +8,10 @@ import { sprintRouter } from './sprints/sprint.controller';
 import { analyticsRouter } from './analytics/analytics.controller';
 import { searchRouter } from './search/search.controller';
 import { aiRouter } from './ai/ai.controller';
+import { aiChatRouter } from './ai/chat/ai.chat.controller';
 import { jobRouter } from './jobs/job.controller';
+import { billingRouter } from './billing/billing.controller';
+import { reportRouter } from './reports/report.controller';
 import { errorHandler } from './middleware/error';
 import { setupActivityListeners } from './activity/activity.listener';
 import { setupNotificationListeners } from './notifications/notification.listener';
@@ -35,7 +38,10 @@ app.use('/api/sprints', sprintRouter);
 app.use('/api/analytics', analyticsRouter);
 app.use('/api/search', searchRouter);
 app.use('/api/ai', aiRouter);
+app.use('/api/ai/chat', aiChatRouter);
 app.use('/api/jobs', jobRouter);
+app.use('/api/billing', billingRouter);
+app.use('/api/reports', reportRouter);
 
 // Register event listeners
 setupActivityListeners();
