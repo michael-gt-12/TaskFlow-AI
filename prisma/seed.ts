@@ -1,4 +1,4 @@
-import { PrismaClient, OrgRole, SystemRole, TaskStatus, TaskPriority } from '@prisma/client';
+import { PrismaClient, OrgRole, SystemRole, TaskStatus, TaskPriority, SprintStatus } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -13,6 +13,7 @@ async function main() {
   await prisma.taskLabel.deleteMany({});
   await prisma.label.deleteMany({});
   await prisma.task.deleteMany({});
+  await prisma.sprint.deleteMany({});
   await prisma.project.deleteMany({});
   await prisma.orgMember.deleteMany({});
   await prisma.organization.deleteMany({});
@@ -54,13 +55,13 @@ async function main() {
 
   // Projects
   const proj1 = await prisma.project.create({
-    data: { name: 'Apollo Core', description: 'Main microservices engine', organizationId: org.id }
+    data: { name: 'Apollo Core', key: 'APOLLO', description: 'Main microservices engine', organizationId: org.id, leadId: alice.id }
   });
   const proj2 = await prisma.project.create({
-    data: { name: 'Athena UI', description: 'Next-gen Frontend dashboard', organizationId: org.id }
+    data: { name: 'Athena UI', key: 'ATHENA', description: 'Next-gen Frontend dashboard', organizationId: org.id, leadId: bob.id }
   });
   const archivedProj = await prisma.project.create({
-    data: { name: 'Legacy Migrate', description: 'Deprecated migrations', organizationId: org.id, isArchived: true }
+    data: { name: 'Legacy Migrate', key: 'LEGACY', description: 'Deprecated migrations', organizationId: org.id, isArchived: true, archivedAt: new Date() }
   });
 
   // Labels
@@ -71,6 +72,31 @@ async function main() {
     data: { projectId: proj1.id, name: 'feature', color: '#00ff00' }
   });
 
+  // Sprints — one active sprint holding the current cycle of work and one
+  // planned sprint queued up behind it.
+  const now = Date.now();
+  const day = 24 * 60 * 60 * 1000;
+  const activeSprint = await prisma.sprint.create({
+    data: {
+      projectId: proj1.id,
+      name: 'Sprint 12 - Stability',
+      goal: 'Burn down the caching and transaction defects before the release freeze.',
+      status: SprintStatus.ACTIVE,
+      startDate: new Date(now - 4 * day),
+      endDate: new Date(now + 10 * day)
+    }
+  });
+  const plannedSprint = await prisma.sprint.create({
+    data: {
+      projectId: proj1.id,
+      name: 'Sprint 13 - Recommendations',
+      goal: 'Ship the first iteration of the AI recommendations engine.',
+      status: SprintStatus.PLANNED,
+      startDate: new Date(now + 11 * day),
+      endDate: new Date(now + 25 * day)
+    }
+  });
+
   // Tasks
   const task1 = await prisma.task.create({
     data: {
@@ -79,6 +105,8 @@ async function main() {
       description: 'Analytics metrics are showing stale reports because cache is not invalidating on bulk actions.',
       status: TaskStatus.IN_PROGRESS,
       priority: TaskPriority.URGENT,
+      storyPoints: 5,
+      sprintId: activeSprint.id,
       creatorId: alice.id,
       assigneeId: charlie.id
     }
@@ -91,6 +119,8 @@ async function main() {
       description: 'Event-driven publishing exceptions trigger partial commits inside the task service.',
       status: TaskStatus.TODO,
       priority: TaskPriority.HIGH,
+      storyPoints: 3,
+      sprintId: activeSprint.id,
       creatorId: bob.id,
       assigneeId: charlie.id
     }
@@ -103,6 +133,8 @@ async function main() {
       description: 'Integrate mock LLM module with token statistics tracking.',
       status: TaskStatus.DONE,
       priority: TaskPriority.MEDIUM,
+      storyPoints: 8,
+      sprintId: activeSprint.id,
       creatorId: alice.id,
       assigneeId: bob.id
     }
