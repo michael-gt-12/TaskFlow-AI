@@ -46,6 +46,7 @@ export const DomainEvents = {
   // Sprints & milestones
   SprintStarted: 'sprint.started',
   SprintCompleted: 'sprint.completed',
+  SprintCancelled: 'sprint.cancelled',
   MilestoneReached: 'milestone.reached',
 
   // Billing
@@ -97,6 +98,23 @@ export interface InvitationEventPayload extends BaseEventPayload {
   invitationId: string;
   email: string;
   role: string;
+}
+
+export interface SprintEventPayload extends BaseEventPayload {
+  sprintId: string;
+  projectId: string;
+  sprintName: string;
+}
+
+export interface SprintCompletedPayload extends SprintEventPayload {
+  completedTasks: number;
+  carriedOverTasks: number;
+}
+
+export interface MilestoneEventPayload extends BaseEventPayload {
+  milestoneId: string;
+  projectId: string;
+  milestoneName: string;
 }
 
 /**

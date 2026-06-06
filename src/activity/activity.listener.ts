@@ -37,4 +37,23 @@ export function setupActivityListeners() {
       { title: taskTitle }
     );
   });
+
+  DomainEventPublisher.subscribe('sprint.started', async (event: DomainEvent) => {
+    const { userId, orgId, projectId, sprintId, sprintName } = event.payload;
+    await ActivityService.log(userId, orgId, projectId, null, 'SPRINT_STARTED', {
+      sprintId,
+      sprintName,
+    });
+  });
+
+  DomainEventPublisher.subscribe('sprint.completed', async (event: DomainEvent) => {
+    const { userId, orgId, projectId, sprintId, sprintName, completedTasks, carriedOverTasks } =
+      event.payload;
+    await ActivityService.log(userId, orgId, projectId, null, 'SPRINT_COMPLETED', {
+      sprintId,
+      sprintName,
+      completedTasks,
+      carriedOverTasks,
+    });
+  });
 }

@@ -38,6 +38,16 @@ async function resolveOrgId(req: AuthenticatedRequest): Promise<string | null> {
     return task.project.organizationId;
   }
 
+  const sprintId = req.params.sprintId || req.body?.sprintId;
+  if (sprintId) {
+    const sprint = await prisma.sprint.findUnique({
+      where: { id: sprintId },
+      include: { project: { select: { organizationId: true } } },
+    });
+    if (!sprint) throw new NotFoundError('Sprint');
+    return sprint.project.organizationId;
+  }
+
   return null;
 }
 
