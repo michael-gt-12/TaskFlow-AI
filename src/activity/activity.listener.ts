@@ -56,4 +56,20 @@ export function setupActivityListeners() {
       carriedOverTasks,
     });
   });
+
+  DomainEventPublisher.subscribe('milestone.reached', async (event: DomainEvent) => {
+    const { userId, orgId, projectId, milestoneId, milestoneName } = event.payload;
+    await ActivityService.log(userId, orgId, projectId, null, 'MILESTONE_REACHED', {
+      milestoneId,
+      milestoneName,
+    });
+  });
+
+  DomainEventPublisher.subscribe('milestone.missed', async (event: DomainEvent) => {
+    const { userId, orgId, projectId, milestoneId, milestoneName } = event.payload;
+    await ActivityService.log(userId, orgId, projectId, null, 'MILESTONE_MISSED', {
+      milestoneId,
+      milestoneName,
+    });
+  });
 }

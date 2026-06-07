@@ -48,6 +48,16 @@ async function resolveOrgId(req: AuthenticatedRequest): Promise<string | null> {
     return sprint.project.organizationId;
   }
 
+  const milestoneId = req.params.milestoneId || req.body?.milestoneId;
+  if (milestoneId) {
+    const milestone = await prisma.milestone.findUnique({
+      where: { id: milestoneId },
+      include: { project: { select: { organizationId: true } } },
+    });
+    if (!milestone) throw new NotFoundError('Milestone');
+    return milestone.project.organizationId;
+  }
+
   return null;
 }
 

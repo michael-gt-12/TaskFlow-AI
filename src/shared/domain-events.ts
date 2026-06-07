@@ -48,6 +48,7 @@ export const DomainEvents = {
   SprintCompleted: 'sprint.completed',
   SprintCancelled: 'sprint.cancelled',
   MilestoneReached: 'milestone.reached',
+  MilestoneMissed: 'milestone.missed',
 
   // Billing
   SubscriptionChanged: 'billing.subscription_changed',
