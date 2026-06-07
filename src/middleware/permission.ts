@@ -28,7 +28,7 @@ async function resolveOrgId(req: AuthenticatedRequest): Promise<string | null> {
     return project.organizationId;
   }
 
-  const taskId = req.params.taskId || req.body?.taskId;
+  const taskId = req.params.taskId || req.body?.taskId || req.body?.sourceTaskId;
   if (taskId) {
     const task = await prisma.task.findUnique({
       where: { id: taskId },
@@ -36,6 +36,16 @@ async function resolveOrgId(req: AuthenticatedRequest): Promise<string | null> {
     });
     if (!task) throw new NotFoundError('Task');
     return task.project.organizationId;
+  }
+
+  const dependencyId = req.params.dependencyId;
+  if (dependencyId) {
+    const dependency = await prisma.taskDependency.findUnique({
+      where: { id: dependencyId },
+      include: { source: { include: { project: { select: { organizationId: true } } } } },
+    });
+    if (!dependency) throw new NotFoundError('Dependency');
+    return dependency.source.project.organizationId;
   }
 
   const sprintId = req.params.sprintId || req.body?.sprintId;

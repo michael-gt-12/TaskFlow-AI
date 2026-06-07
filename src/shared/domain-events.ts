@@ -36,6 +36,8 @@ export const DomainEvents = {
   TaskCompleted: 'task.completed',
   TaskDeleted: 'task.deleted',
   TaskDueSoon: 'task.due_soon',
+  TaskDependencyAdded: 'task.dependency_added',
+  TaskDependencyRemoved: 'task.dependency_removed',
 
   // Comments
   CommentCreated: 'comment.created',
@@ -116,6 +118,13 @@ export interface MilestoneEventPayload extends BaseEventPayload {
   milestoneId: string;
   projectId: string;
   milestoneName: string;
+}
+
+export interface TaskDependencyEventPayload extends BaseEventPayload {
+  projectId: string;
+  sourceTaskId: string;
+  targetTaskId: string;
+  type: string;
 }
 
 /**
