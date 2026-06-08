@@ -58,6 +58,30 @@ async function resolveOrgId(req: AuthenticatedRequest): Promise<string | null> {
     return entry.task.project.organizationId;
   }
 
+  const checklistId = req.params.checklistId;
+  if (checklistId) {
+    const checklist = await prisma.checklist.findUnique({
+      where: { id: checklistId },
+      include: { task: { include: { project: { select: { organizationId: true } } } } },
+    });
+    if (!checklist) throw new NotFoundError('Checklist');
+    return checklist.task.project.organizationId;
+  }
+
+  const itemId = req.params.itemId;
+  if (itemId) {
+    const item = await prisma.checklistItem.findUnique({
+      where: { id: itemId },
+      include: {
+        checklist: {
+          include: { task: { include: { project: { select: { organizationId: true } } } } },
+        },
+      },
+    });
+    if (!item) throw new NotFoundError('Checklist item');
+    return item.checklist.task.project.organizationId;
+  }
+
   const sprintId = req.params.sprintId || req.body?.sprintId;
   if (sprintId) {
     const sprint = await prisma.sprint.findUnique({
