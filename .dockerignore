@@ -1,0 +1,15 @@
+# IMPORTANT: do NOT exclude .git/ — the Silver task harness needs full git history.
+
+# Host-built dependencies and build output: must be rebuilt inside the image,
+# never copied from the build context (host binaries break on alpine/linux).
+node_modules
+dist
+
+# Local env / logs / coverage
+.env
+*.log
+coverage
+
+# Local SQLite dev db
+prisma/dev.db
+prisma/dev.db-journal
