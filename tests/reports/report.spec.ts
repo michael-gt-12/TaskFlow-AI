@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { ReportService } from './report.service';
-import { prisma } from '../database/client';
-import { CSVExporter } from './csv.exporter';
+import { ReportService } from '../../src/reports/report.service';
+import { prisma } from '../../src/database/client';
+import { CSVExporter } from '../../src/reports/csv.exporter';
 
-vi.mock('../database/client', () => ({
+vi.mock('../../src/database/client', () => ({
   prisma: {
     project: {
       findUnique: vi.fn()

@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { JobRunner } from './job.runner';
-import { AnalyticsRefreshJob } from './analytics-refresh.job';
-import { SearchIndexMaintenanceJob } from './search-index-maintenance.job';
-import { NotificationCleanupJob } from './notification-cleanup.job';
-import { ArchivalMaintenanceJob } from './archival-maintenance.job';
-import { prisma } from '../database/client';
-import { CacheService } from '../utils/cache';
+import { JobRunner } from '../../src/jobs/job.runner';
+import { AnalyticsRefreshJob } from '../../src/jobs/analytics-refresh.job';
+import { SearchIndexMaintenanceJob } from '../../src/jobs/search-index-maintenance.job';
+import { NotificationCleanupJob } from '../../src/jobs/notification-cleanup.job';
+import { ArchivalMaintenanceJob } from '../../src/jobs/archival-maintenance.job';
+import { prisma } from '../../src/database/client';
+import { CacheService } from '../../src/utils/cache';
 
-vi.mock('../database/client', () => ({
+vi.mock('../../src/database/client', () => ({
   prisma: {
     project: {
       findMany: vi.fn(),

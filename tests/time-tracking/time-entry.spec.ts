@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { TimeEntryService } from './time-entry.service';
-import { timeEntryRepository } from './time-entry.repository';
-import { CacheService } from '../utils/cache';
-import { prisma } from '../database/client';
+import { TimeEntryService } from '../../src/time-tracking/time-entry.service';
+import { timeEntryRepository } from '../../src/time-tracking/time-entry.repository';
+import { CacheService } from '../../src/utils/cache';
+import { prisma } from '../../src/database/client';
 
-vi.mock('./time-entry.repository', () => ({
+vi.mock('../../src/time-tracking/time-entry.repository', () => ({
   timeEntryRepository: {
     create: vi.fn(),
     findById: vi.fn(),
@@ -17,7 +17,7 @@ vi.mock('./time-entry.repository', () => ({
   TimeEntryRepository: class {},
 }));
 
-vi.mock('../utils/cache', () => ({
+vi.mock('../../src/utils/cache', () => ({
   CacheService: {
     get: vi.fn().mockResolvedValue(null),
     set: vi.fn().mockResolvedValue(undefined),
@@ -26,7 +26,7 @@ vi.mock('../utils/cache', () => ({
   },
 }));
 
-vi.mock('../database/client', () => ({
+vi.mock('../../src/database/client', () => ({
   prisma: {
     task: { findFirst: vi.fn() },
   },

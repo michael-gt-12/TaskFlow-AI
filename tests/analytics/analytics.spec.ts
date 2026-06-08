@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { AnalyticsService } from './analytics.service';
-import { prisma } from '../database/client';
-import { DomainEventPublisher } from '../shared/events';
-import { CacheService } from '../utils/cache';
+import { AnalyticsService } from '../../src/analytics/analytics.service';
+import { prisma } from '../../src/database/client';
+import { DomainEventPublisher } from '../../src/shared/events';
+import { CacheService } from '../../src/utils/cache';
 
-vi.mock('../database/client', () => ({
+vi.mock('../../src/database/client', () => ({
   prisma: {
     task: {
       findMany: vi.fn()

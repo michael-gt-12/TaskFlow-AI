@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { setupActivityListeners } from './activity.listener';
-import { DomainEventPublisher } from '../shared/events';
-import { ActivityService } from './activity.service';
+import { setupActivityListeners } from '../../src/activity/activity.listener';
+import { DomainEventPublisher } from '../../src/shared/events';
+import { ActivityService } from '../../src/activity/activity.service';
 
-vi.mock('./activity.service', () => ({
+vi.mock('../../src/activity/activity.service', () => ({
   ActivityService: {
     log: vi.fn()
   }

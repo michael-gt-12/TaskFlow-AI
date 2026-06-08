@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { BillingService } from './billing.service';
-import { prisma } from '../database/client';
-import { CacheService } from '../utils/cache';
-import { StripeMockClient } from './stripe.mock';
+import { BillingService } from '../../src/billing/billing.service';
+import { prisma } from '../../src/database/client';
+import { CacheService } from '../../src/utils/cache';
+import { StripeMockClient } from '../../src/billing/stripe.mock';
 
-vi.mock('../database/client', () => ({
+vi.mock('../../src/database/client', () => ({
   prisma: {
     orgBilling: {
       findUnique: vi.fn(),

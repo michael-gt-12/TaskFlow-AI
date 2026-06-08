@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { AuthService } from './auth.service';
-import { prisma } from '../database/client';
-import { CryptoUtils } from '../utils/crypto';
+import { AuthService } from '../../src/auth/auth.service';
+import { prisma } from '../../src/database/client';
+import { CryptoUtils } from '../../src/utils/crypto';
 
-vi.mock('../database/client', () => ({
+vi.mock('../../src/database/client', () => ({
   prisma: {
     user: {
       findUnique: vi.fn(),

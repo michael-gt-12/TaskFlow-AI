@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { DtoMapper } from './dto';
+import { DtoMapper } from '../../src/shared/dto';
 
 describe('DtoMapper', () => {
   it('should map task model to DTO correctly', () => {

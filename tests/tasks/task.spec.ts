@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { TaskService } from './task.service';
-import { prisma } from '../database/client';
+import { TaskService } from '../../src/tasks/task.service';
+import { prisma } from '../../src/database/client';
 
-vi.mock('../database/client', () => ({
+vi.mock('../../src/database/client', () => ({
   prisma: {
     task: {
       create: vi.fn(),

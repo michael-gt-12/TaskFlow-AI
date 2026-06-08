@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { AiService } from './ai.service';
+import { AiService } from '../../src/ai/ai.service';
 
 describe('AiService', () => {
   it('should generate mock task summary', async () => {

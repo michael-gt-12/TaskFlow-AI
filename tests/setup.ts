@@ -1,6 +1,6 @@
 import { beforeAll, afterAll } from 'vitest';
-import { prisma } from '../database/client';
-import { redis } from '../utils/redis';
+import { prisma } from '../src/database/client';
+import { redis } from '../src/utils/redis';
 
 beforeAll(async () => {
   // Setup logic before tests run

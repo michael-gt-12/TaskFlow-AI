@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { SearchService } from './search.service';
-import { prisma } from '../database/client';
+import { SearchService } from '../../src/search/search.service';
+import { prisma } from '../../src/database/client';
 
-vi.mock('../database/client', () => ({
+vi.mock('../../src/database/client', () => ({
   prisma: {
     searchIndex: {
       upsert: vi.fn(),

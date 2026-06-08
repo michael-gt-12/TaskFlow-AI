@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { MilestoneService } from './milestone.service';
-import { milestoneRepository } from './milestone.repository';
-import { CacheService } from '../utils/cache';
-import { prisma } from '../database/client';
+import { MilestoneService } from '../../src/milestones/milestone.service';
+import { milestoneRepository } from '../../src/milestones/milestone.repository';
+import { CacheService } from '../../src/utils/cache';
+import { prisma } from '../../src/database/client';
 
-vi.mock('./milestone.repository', () => ({
+vi.mock('../../src/milestones/milestone.repository', () => ({
   milestoneRepository: {
     create: vi.fn(),
     findById: vi.fn(),
@@ -18,7 +18,7 @@ vi.mock('./milestone.repository', () => ({
   MilestoneRepository: class {},
 }));
 
-vi.mock('../utils/cache', () => ({
+vi.mock('../../src/utils/cache', () => ({
   CacheService: {
     get: vi.fn().mockResolvedValue(null),
     set: vi.fn().mockResolvedValue(undefined),
@@ -27,14 +27,14 @@ vi.mock('../utils/cache', () => ({
   },
 }));
 
-vi.mock('../database/client', () => ({
+vi.mock('../../src/database/client', () => ({
   prisma: {
     project: { findFirst: vi.fn() },
     task: { findFirst: vi.fn() },
   },
 }));
 
-vi.mock('../shared/unit-of-work', () => ({
+vi.mock('../../src/shared/unit-of-work', () => ({
   UnitOfWork: {
     execute: vi.fn(async (work: any) =>
       work({ project: { findUnique: vi.fn().mockResolvedValue({ organizationId: 'org1' }) } })

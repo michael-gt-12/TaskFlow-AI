@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { ProjectService } from './project.service';
-import { projectRepository } from './project.repository';
-import { CacheService } from '../utils/cache';
-import { BillingService } from '../billing/billing.service';
-import { prisma } from '../database/client';
+import { ProjectService } from '../../src/projects/project.service';
+import { projectRepository } from '../../src/projects/project.repository';
+import { CacheService } from '../../src/utils/cache';
+import { BillingService } from '../../src/billing/billing.service';
+import { prisma } from '../../src/database/client';
 
-vi.mock('./project.repository', () => ({
+vi.mock('../../src/projects/project.repository', () => ({
   projectRepository: {
     findById: vi.fn(),
     findByIdWithRelations: vi.fn(),
@@ -19,7 +19,7 @@ vi.mock('./project.repository', () => ({
   ProjectRepository: class {},
 }));
 
-vi.mock('../utils/cache', () => ({
+vi.mock('../../src/utils/cache', () => ({
   CacheService: {
     get: vi.fn().mockResolvedValue(null),
     set: vi.fn().mockResolvedValue(undefined),
@@ -28,7 +28,7 @@ vi.mock('../utils/cache', () => ({
   },
 }));
 
-vi.mock('../billing/billing.service', () => ({
+vi.mock('../../src/billing/billing.service', () => ({
   BillingService: { checkProjectLimit: vi.fn().mockResolvedValue(undefined) },
 }));
 
@@ -38,7 +38,7 @@ const txMock = {
   label: { createMany: vi.fn() },
 };
 
-vi.mock('../database/client', () => ({
+vi.mock('../../src/database/client', () => ({
   prisma: {
     $transaction: vi.fn((fn: any) => fn(txMock)),
     orgMember: { findUnique: vi.fn() },

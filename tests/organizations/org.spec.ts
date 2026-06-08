@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { OrgService } from './org.service';
-import { prisma } from '../database/client';
+import { OrgService } from '../../src/organizations/org.service';
+import { prisma } from '../../src/database/client';
 
-vi.mock('../database/client', () => ({
+vi.mock('../../src/database/client', () => ({
   prisma: {
     organization: {
       findUnique: vi.fn()

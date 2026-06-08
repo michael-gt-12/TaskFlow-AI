@@ -1,12 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { MockEmailProvider } from './email.provider';
-import { MockWebhookProvider } from './webhook.provider';
-import { MockIdentityProvider } from './identity.provider';
-import { setupIntegrationListeners } from './integration.listener';
-import { DomainEventPublisher } from '../shared/events';
-import { prisma } from '../database/client';
+import { MockEmailProvider } from '../../src/integrations/email.provider';
+import { MockWebhookProvider } from '../../src/integrations/webhook.provider';
+import { MockIdentityProvider } from '../../src/integrations/identity.provider';
+import { setupIntegrationListeners } from '../../src/integrations/integration.listener';
+import { DomainEventPublisher } from '../../src/shared/events';
+import { prisma } from '../../src/database/client';
 
-vi.mock('../database/client', () => ({
+vi.mock('../../src/database/client', () => ({
   prisma: {
     task: {
       findUnique: vi.fn()

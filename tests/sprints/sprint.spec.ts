@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { SprintService } from './sprint.service';
-import { sprintRepository } from './sprint.repository';
-import { CacheService } from '../utils/cache';
-import { prisma } from '../database/client';
+import { SprintService } from '../../src/sprints/sprint.service';
+import { sprintRepository } from '../../src/sprints/sprint.repository';
+import { CacheService } from '../../src/utils/cache';
+import { prisma } from '../../src/database/client';
 
-vi.mock('./sprint.repository', () => ({
+vi.mock('../../src/sprints/sprint.repository', () => ({
   sprintRepository: {
     create: vi.fn(),
     findById: vi.fn(),
@@ -20,7 +20,7 @@ vi.mock('./sprint.repository', () => ({
   SprintRepository: class {},
 }));
 
-vi.mock('../utils/cache', () => ({
+vi.mock('../../src/utils/cache', () => ({
   CacheService: {
     get: vi.fn().mockResolvedValue(null),
     set: vi.fn().mockResolvedValue(undefined),
@@ -29,7 +29,7 @@ vi.mock('../utils/cache', () => ({
   },
 }));
 
-vi.mock('../database/client', () => ({
+vi.mock('../../src/database/client', () => ({
   prisma: {
     project: { findFirst: vi.fn() },
     task: { findFirst: vi.fn() },
@@ -38,7 +38,7 @@ vi.mock('../database/client', () => ({
 
 // Run the unit-of-work callback immediately with a tx stub that can resolve the
 // organization id, sidestepping the real Prisma transaction machinery.
-vi.mock('../shared/unit-of-work', () => ({
+vi.mock('../../src/shared/unit-of-work', () => ({
   UnitOfWork: {
     execute: vi.fn(async (work: any) =>
       work({ project: { findUnique: vi.fn().mockResolvedValue({ organizationId: 'org1' }) } })

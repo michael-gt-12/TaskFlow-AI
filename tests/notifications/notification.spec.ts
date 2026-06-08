@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { NotificationService } from './notification.service';
-import { prisma } from '../database/client';
+import { NotificationService } from '../../src/notifications/notification.service';
+import { prisma } from '../../src/database/client';
 
-vi.mock('../database/client', () => ({
+vi.mock('../../src/database/client', () => ({
   prisma: {
     notification: {
       create: vi.fn(),

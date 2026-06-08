@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { DependencyService } from './dependency.service';
-import { dependencyRepository } from './dependency.repository';
-import { prisma } from '../database/client';
+import { DependencyService } from '../../src/dependencies/dependency.service';
+import { dependencyRepository } from '../../src/dependencies/dependency.repository';
+import { prisma } from '../../src/database/client';
 
-vi.mock('./dependency.repository', () => ({
+vi.mock('../../src/dependencies/dependency.repository', () => ({
   dependencyRepository: {
     create: vi.fn(),
     findById: vi.fn(),
@@ -15,13 +15,13 @@ vi.mock('./dependency.repository', () => ({
   DependencyRepository: class {},
 }));
 
-vi.mock('../database/client', () => ({
+vi.mock('../../src/database/client', () => ({
   prisma: {
     task: { findFirst: vi.fn() },
   },
 }));
 
-vi.mock('../shared/unit-of-work', () => ({
+vi.mock('../../src/shared/unit-of-work', () => ({
   UnitOfWork: {
     execute: vi.fn(async (work: any) =>
       work({

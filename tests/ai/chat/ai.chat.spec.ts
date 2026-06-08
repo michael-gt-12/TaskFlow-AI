@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { AIChatService } from './ai.chat.service';
-import { prisma } from '../../database/client';
-import { BillingService } from '../../billing/billing.service';
+import { AIChatService } from '../../../src/ai/chat/ai.chat.service';
+import { prisma } from '../../../src/database/client';
+import { BillingService } from '../../../src/billing/billing.service';
 
-vi.mock('../../database/client', () => ({
+vi.mock('../../../src/database/client', () => ({
   prisma: {
     project: {
       findUnique: vi.fn()
@@ -14,7 +14,7 @@ vi.mock('../../database/client', () => ({
   }
 }));
 
-vi.mock('../../billing/billing.service', () => ({
+vi.mock('../../../src/billing/billing.service', () => ({
   BillingService: {
     checkAiAccess: vi.fn()
   }
