@@ -19,6 +19,7 @@ export const CacheKeys = {
   sprintListPattern: (projectId: string) => `sprints:project:${projectId}:*`,
   milestone: (id: string) => `milestone:${id}`,
   milestoneListPattern: (projectId: string) => `milestones:project:${projectId}:*`,
+  taskTimeSummary: (taskId: string) => `time:task:${taskId}`,
   org: (id: string) => `org:${id}`,
   membership: (orgId: string, userId: string) => `member:${orgId}:${userId}`,
   membershipPattern: (orgId: string) => `member:${orgId}:*`,

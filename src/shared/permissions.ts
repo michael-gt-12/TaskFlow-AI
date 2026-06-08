@@ -31,6 +31,8 @@ export type Capability =
   | 'sprint:manage'
   | 'milestone:read'
   | 'milestone:manage'
+  | 'time:log'
+  | 'time:read'
   | 'comment:create'
   | 'comment:moderate'
   | 'analytics:read'
@@ -61,6 +63,8 @@ const ORG_ROLE_CAPABILITIES: Record<OrgRole, Capability[]> = {
     'sprint:manage',
     'milestone:read',
     'milestone:manage',
+    'time:log',
+    'time:read',
     'comment:create',
     'comment:moderate',
     'analytics:read',
@@ -86,6 +90,8 @@ const ORG_ROLE_CAPABILITIES: Record<OrgRole, Capability[]> = {
     'sprint:manage',
     'milestone:read',
     'milestone:manage',
+    'time:log',
+    'time:read',
     'comment:create',
     'comment:moderate',
     'analytics:read',
@@ -101,10 +107,12 @@ const ORG_ROLE_CAPABILITIES: Record<OrgRole, Capability[]> = {
     'task:assign',
     'sprint:read',
     'milestone:read',
+    'time:log',
+    'time:read',
     'comment:create',
     'analytics:read',
   ],
-  GUEST: ['org:read', 'project:read', 'task:read', 'sprint:read', 'milestone:read', 'comment:create'],
+  GUEST: ['org:read', 'project:read', 'task:read', 'sprint:read', 'milestone:read', 'time:read', 'comment:create'],
 };
 
 const PROJECT_ROLE_CAPABILITIES: Record<ProjectRole, Capability[]> = {
@@ -122,6 +130,8 @@ const PROJECT_ROLE_CAPABILITIES: Record<ProjectRole, Capability[]> = {
     'sprint:manage',
     'milestone:read',
     'milestone:manage',
+    'time:log',
+    'time:read',
     'comment:create',
     'comment:moderate',
     'automation:manage',
@@ -134,9 +144,11 @@ const PROJECT_ROLE_CAPABILITIES: Record<ProjectRole, Capability[]> = {
     'task:assign',
     'sprint:read',
     'milestone:read',
+    'time:log',
+    'time:read',
     'comment:create',
   ],
-  VIEWER: ['project:read', 'task:read', 'sprint:read', 'milestone:read', 'comment:create'],
+  VIEWER: ['project:read', 'task:read', 'sprint:read', 'milestone:read', 'time:read', 'comment:create'],
 };
 
 export function orgRoleCapabilities(role: OrgRole): Set<Capability> {

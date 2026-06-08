@@ -48,6 +48,16 @@ async function resolveOrgId(req: AuthenticatedRequest): Promise<string | null> {
     return dependency.source.project.organizationId;
   }
 
+  const entryId = req.params.entryId;
+  if (entryId) {
+    const entry = await prisma.timeEntry.findUnique({
+      where: { id: entryId },
+      include: { task: { include: { project: { select: { organizationId: true } } } } },
+    });
+    if (!entry) throw new NotFoundError('Time entry');
+    return entry.task.project.organizationId;
+  }
+
   const sprintId = req.params.sprintId || req.body?.sprintId;
   if (sprintId) {
     const sprint = await prisma.sprint.findUnique({
